@@ -6,17 +6,21 @@ WIDTH, HEIGHT = 800, 800
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Planet Simulation")
 
-YELLOW = (255, 255, 0)
+YELLOW_SUN = (255, 255, 0)
 BLUE = (0, 0, 255)
 RED = (188, 39, 50)
 DARK_GREY = (80, 78, 81)
 WHITE = (255, 255, 255)
+ORANGE = (255, 165, 0)
+YELLOW = (210, 180, 140)
+BLUE_URANUS = (173, 216, 230)
+BLUE_NEPTUNE = (0, 0, 128)
 
 
 class Planet:
     AU = 149.6e6 * 1000
     G = 6.67428e-11
-    SCALE = 200 / AU # 1 AU = 100 pixels
+    SCALE = 100 / AU # 1 AU = 100 pixels
     TIMESTEP = 3600 * 24 # 1 day
 
     def __init__(self, x, y, radius, color, mass):
@@ -86,8 +90,7 @@ def main():
     clock = pygame.time.Clock()
     
 
-
-    sun = Planet(0,0, 30, YELLOW, 1.98892 * 10**30)
+    sun = Planet(0,0, 30, YELLOW_SUN, 1.98892 * 10**30)
     sun.sun = True
 
     earth = Planet(-1 * Planet.AU, 0, 16,  BLUE, 5.9742 * 10**24)
@@ -102,7 +105,19 @@ def main():
     venus = Planet(0.723 * Planet.AU, 0, 14, WHITE, 4.8685 * 10**24)
     venus.y_vel = -35.02 * 1000
 
-    planets = [sun, earth, mars, mercury, venus]
+    jupiter = Planet(5.203 * Planet.AU, 0, 20, ORANGE, 1.898 * 10**27)
+    jupiter.y_vel = 13.07 * 1000
+
+    saturn = Planet(9.537 * Planet.AU, 0, 18, YELLOW, 5.683 * 10**26)
+    saturn.y_vel = 9.69 * 1000
+
+    uranus = Planet(19.191 * Planet.AU, 0, 16, BLUE_URANUS, 8.681 * 10**25)
+    uranus.y_vel = 6.81 * 1000
+
+    neptune = Planet(30.07 * Planet.AU, 0, 14, BLUE_NEPTUNE, 1.024 * 10**26)
+    neptune.y_vel = 5.43 * 1000
+
+    planets = [sun, earth, mars, mercury, venus, jupiter, saturn, uranus, neptune]
 
     while run:
         clock.tick(60)
@@ -111,6 +126,12 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 4:
+                    Planet.SCALE *= 1.1
+                elif event.button == 5:
+                    Planet.SCALE /= 1.1
+                    
 
         for planet in planets:
             planet.update_position(planets)
